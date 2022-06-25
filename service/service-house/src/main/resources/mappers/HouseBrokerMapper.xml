@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.mapper.HouseBrokerMapper">
+
+    <sql id="columns">
+        select id,
+               house_id,
+               broker_id,
+               broker_name,
+               broker_head_url,
+               create_time,
+               update_time,
+               is_deleted
+    </sql>
+
+    <select id="findHouseBrokerList" resultType="HouseBroker">
+        <include refid="columns"></include>
+        from hse_house_broker
+        where house_id = #{houseId} and is_deleted = 0
+    </select>
+
+    <insert id="insert">
+        insert into hse_house_broker (house_id, broker_id, broker_name)
+        values (#{houseId}, #{brokerId}, #{brokerName})
+    </insert>
+
+    <select id="getById" resultType="HouseBroker">
+        <include refid="columns"></include>
+        from hse_house_broker
+        where id = #{id} and is_deleted = 0
+    </select>
+
+    <update id="update">
+        update hse_house_broker
+        set broker_id       = #{brokerId},
+            broker_name     = #{brokerName},
+            broker_head_url = #{headUrl},
+            update_time     = now()
+        where id = #{id}
+          and is_deleted = 0
+    </update>
+
+    <update id="delete">
+        update hse_house_broker
+        set is_deleted  = 1,
+            update_time = now()
+        where id = #{id}
+    </update>
+
+    <update id="updateBrokerHeadUrl">
+        update hse_house_broker
+        set broker_head_url = #{brokerHeadUrl},
+            update_time     = now()
+        where broker_id = #{brokerId}
+          and is_deleted = 0
+    </update>
+
+</mapper>
